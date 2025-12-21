@@ -135,5 +135,34 @@
       document.querySelector(".add-form-name").value = "";
       document.querySelector(".add-form-text").value = "";
     });
+
+    // Лайки (Стиль, счетчик +/- 1)
+    document.addEventListener("click", function (e) {
+      // Находим кнопку лайка
+      const likeButton = e.target.closest(".like-button");
+      if (likeButton) {
+        // Находим счётчик через общий контейнер
+        const commentContainer = likeButton.closest(".comment");
+        if (commentContainer) {
+          const counter = commentContainer.querySelector(".likes-counter");
+          if (counter) {
+            // Переключаем корректный класс
+            likeButton.classList.toggle("-active-like");
+            // Безопасное получение числа (с дефолтом если не число)
+            let count = parseInt(counter.textContent.trim() || "0", 10);
+            // Обновляем счётчик
+            count += likeButton.classList.contains("-active-like") ? 1 : -1;
+            // Обновляем отображение
+            counter.textContent = count;
+          } else {
+            return;
+          }
+        } else {
+          return;
+        }
+      } else {
+        return;
+      }
+    });
   </script>
 </html>
