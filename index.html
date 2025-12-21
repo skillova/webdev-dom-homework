@@ -65,7 +65,75 @@
 
   <script>
     "use strict";
-    // Код писать здесь
-    console.log("It works!");
+
+    // Форматирует текущую дату и время в виде "ДД.ММ.ГГ ЧЧ:ММ"
+    function getNowDate() {
+      const nowDate = new Date()
+        .toLocaleString("ru-RU", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })
+        .replace(",", " ");
+      return nowDate;
+    }
+
+    // Возвращает разметку нового комментария
+    function getCommentTemplate(author, date, comment, likes = 0) {
+      const commentLi = document.createElement("li");
+      commentLi.className = "comment";
+
+      commentLi.innerHTML = `
+    <div class="comment-header">
+      <div>${author}</div>
+      <div>${date}</div>
+    </div>
+    <div class="comment-body">
+      <div class="comment-text">${comment}</div>
+    </div>
+    <div class="comment-footer">
+      <div class="likes">
+        <span class="likes-counter">${likes}</span>
+        <button class="like-button"></button>
+      </div>
+    </div>
+  `;
+      return commentLi;
+    }
+
+    document.querySelector(".add-form-button").addEventListener("click", function (e) {
+      // Получение значений из формы
+      const userName = document.querySelector(".add-form-name").value;
+      const commentText = document.querySelector(".add-form-text").value;
+
+      // Проверка на валидность, поля не могут быть пустыми
+      if (!userName || !commentText) {
+        alert("Пожалуйста, заполните имя и текст комментария!");
+        return;
+      }
+
+      // Получение  текучей даты и времени
+      const date = getNowDate();
+
+      // Создаём новый комментарий
+      const newComment = getCommentTemplate(userName, date, commentText, 0);
+
+      // Поиск контейнера для комментариев
+      const commentsList = document.querySelector(".comments");
+
+      // Проверка контейнера комментариев, найден/ненайден
+      if (commentsList) {
+        commentsList.appendChild(newComment);
+      } else {
+        console.error("Контейнер .comments не найден!");
+      }
+
+      // Очистка поля ввода после отправки
+      document.querySelector(".add-form-name").value = "";
+      document.querySelector(".add-form-text").value = "";
+    });
   </script>
 </html>
