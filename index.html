@@ -45,17 +45,8 @@
         </li> -->
       </ul>
       <div class="add-form">
-        <input
-          type="text"
-          class="add-form-name"
-          placeholder="Введите ваше имя"
-        />
-        <textarea
-          type="textarea"
-          class="add-form-text"
-          placeholder="Введите ваш коментарий"
-          rows="4"
-        ></textarea>
+        <input type="text" class="add-form-name" placeholder="Введите ваше имя" />
+        <textarea type="textarea" class="add-form-text" placeholder="Введите ваш коментарий" rows="4"></textarea>
         <div class="add-form-row">
           <button class="add-form-button">Написать</button>
         </div>
@@ -88,11 +79,12 @@
     function addLikeButtonListeners() {
       document.querySelectorAll(".like-button").forEach((button) => {
         button.addEventListener("click", function () {
+          event.stopPropagation();
           // Индекс и значения из массива по индексу
           const commentItem = this.closest(".comment");
           const index = Number(commentItem.dataset.index);
           const isLiked = commentsArr[index].isLiked;
-          const counter = Number((commentsArr[index].likesCount));
+          const counter = Number(commentsArr[index].likesCount);
           // Новые значения лайков
           const counterNew = isLiked ? counter - 1 : counter + 1;
           const isLikedNew = !isLiked;
@@ -103,7 +95,7 @@
           renderComments(commentsArr);
         });
       });
-    };
+    }
 
     // Функция рендеринга комментариев
     function renderComments(commentsArr) {
@@ -135,8 +127,7 @@
         // Класс для кнопки лайка
         const likedClass = isLiked ? "-active-like" : "";
         // Заполнение шаблона
-        commentsHTML += COMMENT_TEMPLATE
-          .replace("{{index}}", index)
+        commentsHTML += COMMENT_TEMPLATE.replace("{{index}}", index)
           .replace("{{author}}", author)
           .replace("{{date}}", pubDate)
           .replace("{{text}}", text)
@@ -147,6 +138,8 @@
       containerComments.innerHTML = commentsHTML;
       // Обработчики на кнопки лайков
       addLikeButtonListeners();
+      // Обработчик клика на карточку комментария
+      clickComment();
     }
 
     // Форматирует текущую дату и время в виде "ДД.ММ.ГГ ЧЧ:ММ"
@@ -164,18 +157,42 @@
       return nowDate;
     }
 
+    // Добавление комментария в массив
+    function addComment(commentObj) {
+      commentsArr.push(commentObj);
+      document.querySelector(".add-form-name").value = "";
+      document.querySelector(".add-form-text").value = "";
+    }
+
+    // Обработчик клика на карточку комментария
+    function clickComment() {
+      document.querySelectorAll(".comment").forEach((comment) => {
+        comment.addEventListener("click", function () {
+          const commentItem = this.closest(".comment");
+          const index = Number(commentItem.dataset.index);
+          const form = document.querySelector(".add-form");
+          const input = form.querySelector(".add-form-name");
+          const text = form.querySelector(".add-form-text");
+          text.value = `${commentsArr[index].author}: ${commentsArr[index].text}`;
+        });
+      });
+    }
+
+    // Валидтор текста комментариев
+    function sanitizeHtml(text) {
+      return text.replaceAll(/</g, "&lt;").replaceAll(/>/g, "&gt;")
+    }
+
     // Обработчик клика на элемент добавить комментарий
     document.querySelector(".add-form-button").addEventListener("click", function () {
       // Получение данных из формы
-      const author = document.querySelector(".add-form-name").value;
-      const text = document.querySelector(".add-form-text").value;
+      const author = sanitizeHtml(document.querySelector(".add-form-name").value);
+      const text = sanitizeHtml(document.querySelector(".add-form-text").value);
       const pubDate = getNowDate();
       // Добавление в массив
       if (author && text) {
         const commentObj = { author, text, pubDate, likesCount: 0, isLiked: false };
-        commentsArr.push(commentObj);
-        document.querySelector(".add-form-name").value = "";
-        document.querySelector(".add-form-text").value = "";
+        addComment(commentObj);
       } else {
         alert("Заполните все поля!");
       }
@@ -183,7 +200,7 @@
       renderComments(commentsArr);
     });
 
-        // Рендеринг комментариев
+    // Рендеринг комментариев
     renderComments(commentsArr);
   </script>
 </html>
