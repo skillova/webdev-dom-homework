@@ -1,17 +1,10 @@
-import {addLikeButtonListeners, clickComment} from "./initListeners.js"; // Импорт функций обработчиков событий
-
-// Добавление комментария в массив
-function addComment(commentObj) {
-  commentsArr.push(commentObj);
-  document.querySelector(".add-form-name").value = "";
-  document.querySelector(".add-form-text").value = "";
-}
+import { addLikeButtonListeners, clickComment } from './initListeners.js' // Импорт функций обработчиков событий
 
 // Функция рендеринга комментариев
 export function renderComments(commentsArr) {
   // Поиск контейнера для комментариев
-  const containerComments = document.querySelector(".comments");
-  let commentsHTML = "";
+  const containerComments = document.querySelector('.comments')
+  let commentsHTML = ''
   // Шаблон комментария
   const COMMENT_TEMPLATE = `
     <li data-index = {{index}} class="comment">
@@ -29,25 +22,25 @@ export function renderComments(commentsArr) {
           </div>
         </div>
       </li>
-    `;
+    `
   // Заполнение шаблона комментария
   commentsArr.forEach((comment, index) => {
     // Деструктуризация объекта комментария
-    const { author, pubDate, text, likesCount = 0, isLiked = false } = comment;
+    const { author, pubDate, text, likesCount = 0, isLiked = false } = comment
     // Класс для кнопки лайка
-    const likedClass = isLiked ? "-active-like" : "";
+    const likedClass = isLiked ? '-active-like' : ''
     // Заполнение шаблона
-    commentsHTML += COMMENT_TEMPLATE.replace("{{index}}", index)
-      .replace("{{author}}", author)
-      .replace("{{date}}", pubDate)
-      .replace("{{text}}", text)
-      .replace("{{likes}}", likesCount)
-      .replace("{{likedClass}}", likedClass);
-  });
+    commentsHTML += COMMENT_TEMPLATE.replace('{{index}}', index)
+      .replace('{{author}}', author)
+      .replace('{{date}}', pubDate)
+      .replace('{{text}}', text)
+      .replace('{{likes}}', likesCount)
+      .replace('{{likedClass}}', likedClass)
+  })
   // Вставка в DOM
-  containerComments.innerHTML = commentsHTML;
+  containerComments.innerHTML = commentsHTML
   // Обработчики на кнопки лайков
-  addLikeButtonListeners();
+  addLikeButtonListeners()
   // Обработчик клика на карточку комментария
-  clickComment();
+  clickComment()
 }
