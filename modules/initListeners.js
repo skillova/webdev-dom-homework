@@ -31,7 +31,7 @@ export function addCommentButtonListener() {
     .addEventListener('click', function () {
       // Получение данных из формы
       const author = sanitizeHtml(
-        document.querySelector('.add-form-name').value,
+        document.querySelector('.add-form-name').value
       )
       const text = sanitizeHtml(document.querySelector('.add-form-text').value)
       const pubDate = getNowDate()

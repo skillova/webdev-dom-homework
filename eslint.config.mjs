@@ -7,6 +7,11 @@ import plugin from 'eslint-plugin-prettier/recommended'
 export default [
   { languageOptions: { globals: globals.browser } },
   pluginJs.configs.recommended,
-  config,
-  plugin,
+  prettierConfig,
+  pluginPrettier,
+  {
+    rules: {
+      'linebreak-style': ['error', 'unix'],
+    },
+  },
 ]

@@ -1,3 +1,12 @@
-tabWidth: 2
-semi: false
-singleQuote: true
+tabWidth: 2 # Размер отступа в пробелах
+semi: false # Удаление точек с запятой в конце инструкций (для JS/TS)
+singleQuote: true # Использование одинарных кавычек
+printWidth: 80 # Ширина строки (максимальное количество символов в строке)
+trailingComma: es5 # Добавление запятой в конце объектов/массивов, где это возможно (стиль ES5)
+proseWrap: preserve # Перенос свойств объекта на новые строки, если их больше одного
+endOfLine: lf # Принудительное использование LF (Unix-переносы строк)
+overrides:
+  - files: '*.json'
+    options:
+      printWidth: 120
+      tabWidth: 2
