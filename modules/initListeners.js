@@ -30,13 +30,12 @@ export const addCommentButtonListener = () =>
     fetch(url, {
       method: 'POST',
       body: JSON.stringify({ name, text }),
+    }).then(() => {
+      document
+        .querySelectorAll('.add-form-name, .add-form-text')
+        .forEach((el) => (el.value = ''))
+      renderComments()
     })
-
-    document
-      .querySelectorAll('.add-form-name, .add-form-text')
-      .forEach((el) => (el.value = ''))
-
-    renderComments()
   })
 
 // Обработчик клика на карточку комментария
