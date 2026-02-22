@@ -31,3 +31,8 @@ export const renderComments = async () => {
   addLikeButtonListeners()
   clickComment()
 }
+
+export const loader = () => {
+  document.querySelector('.comments').innerHTML =
+    'Пожалуйста, подождите, загружаю комментарии...'
+}
