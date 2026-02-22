@@ -3,5 +3,5 @@ import { addCommentButtonListener } from './modules/initListeners.js'
 
 export const url = `https://wedev-api.sky.pro/api/v1/skillova/comments`
 
-renderComments(url)
+renderComments()
 addCommentButtonListener()

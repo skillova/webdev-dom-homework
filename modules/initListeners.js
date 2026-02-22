@@ -1,6 +1,5 @@
 import { renderComments } from './renderComments.js'
 import { sanitizeHtml } from './sanitizaHtml.js'
-import { commentsCreate } from './api.js'
 import { url } from '../index.js'
 
 // Функция обработки кликов на кнопки лайков
@@ -22,16 +21,22 @@ export const addLikeButtonListeners = () => {
 // Обработчик клика на элемент добавить комментарий
 export const addCommentButtonListener = () =>
   document.querySelector('.add-form-button').addEventListener('click', () => {
-    const name = sanitizeHtml(document.querySelector('.add-form-name').value)
-    const text = sanitizeHtml(document.querySelector('.add-form-text').value)
-    if (!name || !text) {
-      alert('Заполните все поля!')
-      return
-    }
-    commentsCreate(url, { name: name, text: text })
-    document.querySelector('.add-form-name').value = ''
-    document.querySelector('.add-form-text').value = ''
-    renderComments(url)
+    const [name, text] = ['.add-form-name', '.add-form-text'].map((sel) =>
+      sanitizeHtml(document.querySelector(sel).value)
+    )
+
+    if (!name || !text) return alert('Заполните все поля!')
+
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({ name, text }),
+    })
+
+    document
+      .querySelectorAll('.add-form-name, .add-form-text')
+      .forEach((el) => (el.value = ''))
+
+    renderComments()
   })
 
 // Обработчик клика на карточку комментария
