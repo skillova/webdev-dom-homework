@@ -4,16 +4,24 @@ import { url } from '../index.js'
 
 // Функция обработки кликов на кнопки лайков
 export const addLikeButtonListeners = () => {
+  const delay = (interval = 3000) =>
+    new Promise((resolve) => setTimeout(resolve, interval))
+
   document.querySelectorAll('.like-button').forEach((btn) =>
-    btn.addEventListener('click', (event) => {
+    btn.addEventListener('click', async (event) => {
       event.stopPropagation()
+      btn.classList.add('-loading-like')
+      await delay()
+
       const comment = btn.closest('.comment')
       const counter = comment.querySelector('.likes-counter')
-      const newCounter = Number(counter.textContent)
       const isLiked = btn.classList.contains('-active-like')
 
-      counter.textContent = isLiked ? newCounter - 1 : newCounter + 1
+      counter.textContent = isLiked
+        ? Number(counter.textContent) - 1
+        : Number(counter.textContent) + 1
       btn.classList.toggle('-active-like', !isLiked)
+      btn.classList.remove('-loading-like')
     })
   )
 }
