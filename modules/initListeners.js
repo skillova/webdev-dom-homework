@@ -19,13 +19,21 @@ export const addLikeButtonListeners = () => {
 }
 
 // Обработчик клика на элемент добавить комментарий
-export const addCommentButtonListener = () =>
+export const addCommentButtonListener = () => {
+  const toggleVisibleForm = () => {
+    document
+      .querySelectorAll('.add-form, .status-message')
+      .forEach((el) => el.classList.toggle('none'))
+  }
+
   document.querySelector('.add-form-button').addEventListener('click', () => {
     const [name, text] = ['.add-form-name', '.add-form-text'].map((sel) =>
       sanitizeHtml(document.querySelector(sel).value)
     )
 
     if (!name || !text) return alert('Заполните все поля!')
+
+    toggleVisibleForm()
 
     fetch(url, {
       method: 'POST',
@@ -35,8 +43,10 @@ export const addCommentButtonListener = () =>
         .querySelectorAll('.add-form-name, .add-form-text')
         .forEach((el) => (el.value = ''))
       renderComments()
+      toggleVisibleForm()
     })
   })
+}
 
 // Обработчик клика на карточку комментария
 export function clickComment() {
