@@ -1,6 +1,7 @@
 import { addLikeButtonListeners, clickComment } from './initListeners.js'
 import { formatDateUTC } from './utilites.js'
 import { url } from '../index.js'
+import { commentsList } from './api.js'
 
 export const renderComments = async () => {
   const container = document.querySelector('.comments')
@@ -21,12 +22,9 @@ export const renderComments = async () => {
     </div>
   </li>
 `
-  await fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      const html = data.comments.map(commentTemplate).join('')
-      container.innerHTML = html
-    })
+  const commentsArr = await commentsList(url)
+  const combinedHtml  = commentsArr.map(commentTemplate).join('')
+  container.innerHTML = combinedHtml 
 
   addLikeButtonListeners()
   clickComment()

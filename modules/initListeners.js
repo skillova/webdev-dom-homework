@@ -1,6 +1,7 @@
 import { renderComments } from './renderComments.js'
 import { sanitizeHtml } from './sanitizaHtml.js'
 import { url } from '../index.js'
+import { commentCreate } from './api.js'
 
 // Функция обработки кликов на кнопки лайков
 export const addLikeButtonListeners = () => {
@@ -35,24 +36,25 @@ export const addCommentButtonListener = () => {
   }
 
   document.querySelector('.add-form-button').addEventListener('click', () => {
-    const [name, text] = ['.add-form-name', '.add-form-text'].map((sel) =>
-      sanitizeHtml(document.querySelector(sel).value)
-    )
+    const commentData = {
+      text: sanitizeHtml(document.querySelector('.add-form-text').value),
+      name: sanitizeHtml(document.querySelector('.add-form-name').value),
+    }
+    console.log(commentData);
 
-    if (!name || !text) return alert('Заполните все поля!')
+    document
+      .querySelectorAll('.add-form-name, .add-form-text')
+      .forEach((el) => (el.value = ''))
 
     toggleVisibleForm()
 
-    fetch(url, {
-      method: 'POST',
-      body: JSON.stringify({ name, text }),
-    }).then(() => {
-      document
-        .querySelectorAll('.add-form-name, .add-form-text')
-        .forEach((el) => (el.value = ''))
-      renderComments()
-      toggleVisibleForm()
-    })
+    commentCreate(url, commentData)
+      .then(() => {
+        renderComments()
+      })
+      .finally(() => {
+        toggleVisibleForm()
+      })
   })
 }
 
