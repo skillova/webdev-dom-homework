@@ -1,34 +1,36 @@
 import { addLikeButtonListeners, clickComment } from './initListeners.js'
-import { commentsList } from './api.js'
 import { formatDateUTC } from './utilites.js'
+import { url } from '../index.js'
+import { commentsList } from './api.js'
 
-export async function renderComments(url) {
+export const renderComments = async () => {
   const container = document.querySelector('.comments')
+  const commentTemplate = (comment, index) => `
+  <li data-index="${index}" data-id="${comment.id}" class="comment">
+    <div class="comment-header">
+      <div>${comment.author?.name || 'Аноним'}</div>
+      <div>${formatDateUTC(comment.date) || 'Дата недоступна'}</div>
+    </div>
+    <div class="comment-body">
+      <div class="comment-text">${comment.text || 'Текст комментария недоступен'}</div>
+    </div>
+    <div class="comment-footer">
+      <div class="likes">
+        <span class="likes-counter">${comment.likes || 0}</span>
+        <button class="like-button ${comment.isLiked ? '-active-like' : ''}"></button>
+      </div>
+    </div>
+  </li>
+`
   const commentsArr = await commentsList(url)
+  const combinedHtml  = commentsArr.map(commentTemplate).join('')
+  container.innerHTML = combinedHtml 
 
-  const html = commentsArr
-    .map(
-      ({ id, date, likes = 0, isLiked = false, text, author }, index) => `
-    <li data-index="${index}" data-id="${id}" class="comment">
-      <div class="comment-header">
-        <div>${author.name}</div>
-        <div>${formatDateUTC(date)}</div>
-      </div>
-      <div class="comment-body">
-        <div class="comment-text">${text}</div>
-      </div>
-      <div class="comment-footer">
-        <div class="likes">
-          <span class="likes-counter">${likes}</span>
-          <button class="like-button ${isLiked ? '-active-like' : ''}"></button>
-        </div>
-      </div>
-    </li>
-  `
-    )
-    .join('')
-
-  container.innerHTML = html
   addLikeButtonListeners()
   clickComment()
+}
+
+export const loader = () => {
+  document.querySelector('.comments').innerHTML =
+    'Пожалуйста, подождите, загружаю комментарии...'
 }
