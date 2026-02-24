@@ -40,7 +40,6 @@ export const addCommentButtonListener = () => {
       text: sanitizeHtml(document.querySelector('.add-form-text').value),
       name: sanitizeHtml(document.querySelector('.add-form-name').value),
     }
-    console.log(commentData);
 
     document
       .querySelectorAll('.add-form-name, .add-form-text')
