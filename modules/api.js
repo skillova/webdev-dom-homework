@@ -11,4 +11,10 @@ export const commentCreate = (url, obj) => {
     method: 'POST',
     body: JSON.stringify(obj),
   })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.error) {
+        throw new Error(data.error)
+      }
+    })
 }

@@ -39,20 +39,41 @@ export const addCommentButtonListener = () => {
     const commentData = {
       text: sanitizeHtml(document.querySelector('.add-form-text').value),
       name: sanitizeHtml(document.querySelector('.add-form-name').value),
+      forceError: true
     }
-
-    document
-      .querySelectorAll('.add-form-name, .add-form-text')
-      .forEach((el) => (el.value = ''))
 
     toggleVisibleForm()
 
     commentCreate(url, commentData)
       .then(() => {
+        document
+          .querySelectorAll('.add-form-name, .add-form-text')
+          .forEach((el) => (el.value = ''))
         renderComments()
       })
       .finally(() => {
         toggleVisibleForm()
+      })
+      .catch((error) => {
+        const inputError = (selector, errorMessage) => {
+          if (error.message === errorMessage) {
+            const element = document.querySelector(selector)
+            element.classList.add('-error')
+            alert('Имя и комментарий должны быть не короче 3 символов')
+            setTimeout(() => element.classList.remove('-error'), 3000)
+          }
+        }
+
+        inputError('.add-form-name', 'name должен содержать хотя бы 3 символа')
+        inputError('.add-form-text', 'text должен содержать хотя бы 3 символа')
+
+        if (error.message === 'Извините сервер упал, попробуйте позже') {
+          alert('Сервер сломался, попробуй позже')
+        }
+
+        if (error.message === 'Failed to fetch') {
+          alert('Кажется, у вас сломался интернет, попробуйте позже')
+        }
       })
   })
 }
