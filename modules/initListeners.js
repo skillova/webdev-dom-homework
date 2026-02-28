@@ -2,6 +2,7 @@ import { renderComments } from './renderComments.js'
 import { sanitizeHtml } from './sanitizaHtml.js'
 import { url } from '../index.js'
 import { commentCreate } from './api.js'
+import { renderLogin } from './renderlogin.js'
 
 // Функция обработки кликов на кнопки лайков
 export const addLikeButtonListeners = () => {
@@ -63,9 +64,17 @@ export const addCommentButtonListener = () => {
         }
         if (error.message === 'Неверный запрос') {
           alert('Имя и комментарий должны быть не короче 3 символов')
-          const elementsErr = document.querySelectorAll('.add-form-name, .add-form-text')
+          const elementsErr = document.querySelectorAll(
+            '.add-form-name, .add-form-text'
+          )
           elementsErr.forEach((element) => element.classList.add('-error'))
-          setTimeout(() => elementsErr.forEach((element) => element.classList.remove('-error')), 1000)
+          setTimeout(
+            () =>
+              elementsErr.forEach((element) =>
+                element.classList.remove('-error')
+              ),
+            1000
+          )
         }
       })
   })
@@ -83,4 +92,10 @@ export function clickComment() {
       textInput.focus()
     })
   })
+}
+
+export const btnLoginListener = () => {
+  document
+    .querySelector('.link-login')
+    .addEventListener('click', () => renderLogin())
 }
