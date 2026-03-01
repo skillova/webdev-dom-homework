@@ -24,6 +24,9 @@ export const renderLogin = () => {
   })
 
   buttonEl.addEventListener('click', () => {
+    if (loginEl.value === '' || passwordEl.value === '') {
+      return alert('Введите логин и пароль')
+    }
     login(loginEl.value, passwordEl.value)
       .then((response) => {
         return response.json()

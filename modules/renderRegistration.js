@@ -1,6 +1,6 @@
 import { registration, setToken, setName } from './api.js'
 import { renderComments } from './renderComments.js'
-import { renderLogin } from './renderlogin.js'
+import { renderLogin } from './renderLogin.js'
 
 export const renderRegistration = () => {
   const container = document.querySelector('.container')
@@ -27,6 +27,9 @@ export const renderRegistration = () => {
   const buttonEl = document.querySelector('.button-main')
 
   buttonEl.addEventListener('click', () => {
+    if (nameEl.value === '' || loginEl.value === '' || passwordEl.value === '') {
+      return alert('Все поля обязательны для заполнения')
+    }
     registration(nameEl.value, loginEl.value, passwordEl.value)
       .then((response) => {
         return response.json()

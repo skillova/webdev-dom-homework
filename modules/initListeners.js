@@ -2,7 +2,7 @@ import { renderComments } from './renderComments.js'
 import { sanitizeHtml } from './sanitizaHtml.js'
 import { url } from '../index.js'
 import { commentCreate } from './api.js'
-import { renderLogin } from './renderlogin.js'
+import { renderLogin } from './renderLogin.js'
 
 // Функция обработки кликов на кнопки лайков
 export const addLikeButtonListeners = () => {
