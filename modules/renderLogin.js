@@ -37,5 +37,17 @@ export const renderLogin = () => {
         setName(data.user.name)
         renderComments()
       })
+      .catch((error) => {
+        console.log(error)
+        if (error.message === 'Failed to fetch') {
+          alert('Кажется, у вас сломался интернет, попробуйте позже')
+        }
+        if (error.message === 'Неверный логин или пароль') {
+          alert('Неверный логин или пароль')
+        }
+        if (error.message === 'Ошибка сервера') {
+          alert('Ошибка сервера')
+        }
+      })
   })
 }

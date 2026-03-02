@@ -42,6 +42,13 @@ export const login = (login, password) => {
   return fetch(`${authUrl}/login`, {
     method: 'POST',
     body: JSON.stringify({ login, password }),
+  }).then((response) => {
+    if (response.status === 500) {
+      throw new Error('Ошибка сервера')
+    }
+    if (response.status === 400) {
+      throw new Error('Неверный логин или пароль')
+    }
   })
 }
 
